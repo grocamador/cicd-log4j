@@ -10,6 +10,8 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:517716713836:certificate/556629f4-2d86-4351-87d5-77e0b172a6ae
     # Only run SSL on the port named "https" below.
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+    service.beta.kubernetes.io/aws-load-balancer-security-groups: sg-0a4ef6d71d7b96616
+
 spec:
   selector:
     app: log4j
