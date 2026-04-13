@@ -51,10 +51,14 @@ jobs:
 
       - name: Scan image with CrowdStrike Falcon Container Scanner
         uses: CrowdStrike/fcs-action@v1
+        env:
+          FALCON_CLIENT_ID: ${{ secrets.FALCON_CLIENT_ID }}
+          FALCON_CLIENT_SECRET: ${{ secrets.FALCON_CLIENT_SECRET }}
         with:
-          image: log4j-app:latest
-          falcon_client_id: ${{ secrets.FALCON_CLIENT_ID }}
-          falcon_client_secret: ${{ secrets.FALCON_CLIENT_SECRET }}
+          path: .
+          falcon_region: us-1
+          report_formats: json
+          upload_results: true
 
       - name: Upload scan results
         if: always()
