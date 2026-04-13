@@ -11,6 +11,7 @@ on:
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
+    environment: FCS-CRWD
 
     permissions:
       contents: read
