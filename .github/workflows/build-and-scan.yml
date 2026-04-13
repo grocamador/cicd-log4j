@@ -64,7 +64,7 @@ jobs:
 
           # Login to CrowdStrike registry
           echo "Logging in to CrowdStrike registry..."
-          docker login -u "$CS_USERNAME" -p "$CS_PASSWORD" "$CS_REGISTRY"
+          echo "$CS_PASSWORD" | docker login -u "$CS_USERNAME" --password-stdin "$CS_REGISTRY"
 
           # Pull FCS container
           echo "Pulling FCS container..."
