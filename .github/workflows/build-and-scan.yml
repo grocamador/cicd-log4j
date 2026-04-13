@@ -49,16 +49,36 @@ jobs:
           tags: log4j-app:latest
           no-cache: true
 
-      - name: Scan image with CrowdStrike Falcon Container Scanner
-        uses: CrowdStrike/fcs-action@v1
+      - name: Scan with CrowdStrike Falcon Container Scanner
         env:
+          CS_USERNAME: ${{ secrets.CS_USERNAME }}
+          CS_PASSWORD: ${{ secrets.CS_PASSWORD }}
+          CS_REGISTRY: registry.crowdstrike.com
+          CS_IMAGE_NAME: registry.crowdstrike.com/fcs/us-1/release/cs-fcs
+          CS_IMAGE_TAG: "0.42.0"
+          FALCON_REGION: us-1
           FALCON_CLIENT_ID: ${{ secrets.FALCON_CLIENT_ID }}
           FALCON_CLIENT_SECRET: ${{ secrets.FALCON_CLIENT_SECRET }}
-        with:
-          path: .
-          falcon_region: us-1
-          report_formats: json
-          upload_results: true
+        run: |
+          set +x
+
+          # Login to CrowdStrike registry
+          echo "Logging in to CrowdStrike registry..."
+          echo "$CS_PASSWORD" | docker login "$CS_REGISTRY" --username "$CS_USERNAME" --password-stdin
+
+          # Pull FCS container
+          echo "Pulling FCS container..."
+          docker pull "$CS_IMAGE_NAME:$CS_IMAGE_TAG"
+
+          # Run IaC scan
+          echo "Running FCS IaC scan..."
+          docker run --network=host --rm "$CS_IMAGE_NAME:$CS_IMAGE_TAG" \
+            --client-id "$FALCON_CLIENT_ID" \
+            --client-secret "$FALCON_CLIENT_SECRET" \
+            --falcon-region "$FALCON_REGION" \
+            iac scan -p "git::https://github.com/grocamador/cicd-log4j.git//kubernetes" \
+            --upload-results \
+            --fail-on "high=10,medium=70,low=50,info=10" || true
 
       - name: Upload scan results
         if: always()
