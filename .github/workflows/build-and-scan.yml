@@ -1,0 +1,48 @@
+name: Build and Scan Container Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          load: true
+          tags: log4j-app:latest
+
+      - name: Scan image with CrowdStrike Falcon Container Scanner
+        uses: CrowdStrike/fcs-action@v1
+        with:
+          image: log4j-app:latest
+          username: ${{ secrets.CROWDSTRIKE_USERNAME }}
+          password: ${{ secrets.CROWDSTRIKE_PASSWORD }}
+          registry: crowdstrike
+
+      - name: Upload scan results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: falcon-scan-results
+          path: falcon-scan-results.json
