@@ -32,8 +32,8 @@ jobs:
           image: alpine:latest
           upload_results: true
           minimum_severity: low
-          output_path: './falcon-scan-results.json'
-          report_formats: json
+          output_path: './falcon-scan-results.sarif'
+          report_formats: sarif
         env:
           FALCON_CLIENT_SECRET: ${{ secrets.FALCON_CLIENT_SECRET }}
 
@@ -73,8 +73,8 @@ jobs:
           image: log4j-app:latest
           upload_results: true
           minimum_severity: low
-          output_path: './falcon-scan-results.json'
-          report_formats: json
+          output_path: './falcon-scan-results.sarif'
+          report_formats: sarif
         env:
           FALCON_CLIENT_SECRET: ${{ secrets.FALCON_CLIENT_SECRET }}
 
@@ -83,4 +83,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: falcon-scan-results
-          path: falcon-scan-results.json
+          path: falcon-scan-results.sarif
