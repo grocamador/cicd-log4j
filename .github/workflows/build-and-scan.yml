@@ -49,7 +49,7 @@ jobs:
           tags: log4j-app:latest
           no-cache: true
 
-      - name: Scan with CrowdStrike Falcon Container Scanner
+      - name: Scan Docker image with CrowdStrike Falcon Container Scanner
         env:
           CS_USERNAME: ${{ secrets.CS_USERNAME }}
           CS_PASSWORD: ${{ secrets.CS_PASSWORD }}
@@ -70,13 +70,15 @@ jobs:
           echo "Pulling FCS container..."
           docker pull "$CS_IMAGE_NAME:$CS_IMAGE_TAG"
 
-          # Run IaC scan
-          echo "Running FCS IaC scan..."
-          docker run --network=host --rm "$CS_IMAGE_NAME:$CS_IMAGE_TAG" \
+          # Scan the built Docker image
+          echo "Running container image scan..."
+          docker run --network=host --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            "$CS_IMAGE_NAME:$CS_IMAGE_TAG" \
             --client-id "$FALCON_CLIENT_ID" \
             --client-secret "$FALCON_CLIENT_SECRET" \
             --falcon-region "$FALCON_REGION" \
-            iac scan -p "git::https://github.com/grocamador/cicd-log4j.git//kubernetes" \
+            image scan -i "log4j-app:latest" \
             --upload-results \
             --fail-on "high=10,medium=70,low=50,info=10" || true
 
