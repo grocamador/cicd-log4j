@@ -50,6 +50,20 @@ jobs:
           tags: log4j-app:latest
           no-cache: true
 
+      - name: Scan public image with CrowdStrike Falcon Container Scanner
+        uses: crowdstrike/fcs-action@v4.0.0
+        with:
+          falcon_client_id: ${{ vars.FALCON_CLIENT_ID }}
+          falcon_region: 'us-1'
+          scan_type: image
+          image: alpine:latest
+          upload_results: true
+          minimum_severity: low
+          output_path: './falcon-scan-results.json'
+          report_formats: json
+        env:
+          FALCON_CLIENT_SECRET: ${{ secrets.FALCON_CLIENT_SECRET }}
+
       - name: Scan Docker image with CrowdStrike Falcon Container Scanner
         uses: crowdstrike/fcs-action@v4.0.0
         with:
