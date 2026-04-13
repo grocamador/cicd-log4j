@@ -22,6 +22,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Compile with Maven
+        run: |
+          cd vulnerable-application
+          mvn clean package
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
