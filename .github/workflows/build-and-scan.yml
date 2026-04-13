@@ -36,9 +36,8 @@ jobs:
         uses: CrowdStrike/fcs-action@v1
         with:
           image: log4j-app:latest
-          username: ${{ secrets.CROWDSTRIKE_USERNAME }}
-          password: ${{ secrets.CROWDSTRIKE_PASSWORD }}
-          registry: crowdstrike
+          falcon_client_id: ${{ secrets.FALCON_CLIENT_ID }}
+          falcon_client_secret: ${{ secrets.FALCON_CLIENT_SECRET }}
 
       - name: Upload scan results
         if: always()
