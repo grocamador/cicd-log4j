@@ -1,3 +1,4 @@
+# Multi-stage Docker build for Log4j vulnerable application
 # Build stage
 FROM openjdk:8-jdk-alpine AS builder
 WORKDIR /app
