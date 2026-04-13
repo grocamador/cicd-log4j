@@ -1,6 +1,6 @@
 # Multi-stage Docker build for Log4j vulnerable application
 # Runtime stage - assumes WAR is built before Docker build
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:8-jre-alpine
 RUN apk add --no-cache curl
 WORKDIR /app
 
