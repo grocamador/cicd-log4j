@@ -31,6 +31,9 @@ jobs:
           push: false
           load: true
           tags: log4j-app:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          no-cache: true
 
       - name: Scan image with CrowdStrike Falcon Container Scanner
         uses: CrowdStrike/fcs-action@v1
