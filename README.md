@@ -3,6 +3,8 @@ Building and deploying an exploitable web containerized application with Log4j o
 
 For PoC/demo purpose only
 
+**Last triggered:** 2026-07-16
+
 <img width="901" alt="image" src="https://github.com/user-attachments/assets/a05f6889-852d-41e4-a40a-222002928c2c" />
 
 Based on https://github.com/kozmer/log4j-shell-poc
