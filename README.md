@@ -1,5 +1,5 @@
 # cicd-log4j
-Building and deploying an exploitable web containerized application with Log4j on Jenkins into EKS.
+Building and deploying an exploitable web containerized application with Log4j on Jenkins into EKS or any Kubernetes.
 
 For PoC/demo purpose only
 
